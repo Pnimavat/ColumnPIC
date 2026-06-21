@@ -1,0 +1,1032 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Columnpic — Canadian Residential Construction</title>
+  <meta name="description" content="Columnpic — Canadian residential construction. Ottawa, Ontario. Quality homes built to last." />
+  <meta property="og:title"       content="Columnpic — Canadian Residential Construction" />
+  <meta property="og:description" content="We build homes. Nothing more needs to be said." />
+  <meta property="og:type"        content="website" />
+  <meta property="og:image"       content="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=1200&q=80" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ── Reset & tokens ─────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --navy:    #1E3A5F;
+      --navy-dk: #142848;
+      --orange:  #E85400;
+      --gold:    #C9A96E;
+      --gold-br: #A67C2E;
+      --gold-lt: #DEC89A;
+      --white:   #FAFAFA;
+      --stone:   #F4F2EE;
+      --text:    #2C2C2C;
+      --serif:   'Playfair Display', Georgia, serif;
+      --sans:    'Inter', system-ui, sans-serif;
+      --nav-h:   76px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--sans);
+      background: var(--white);
+      color: var(--text);
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    img { display: block; max-width: 100%; }
+    a   { text-decoration: none; color: inherit; }
+
+    /* Fluid container — wider on large screens */
+    .container {
+      width: min(1440px, 92%);
+      margin-inline: auto;
+    }
+    @media (min-width: 1600px) {
+      .container { width: min(1600px, 88%); }
+    }
+
+    /* ── Reveal ─────────────────────────────────────────────── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(22px);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+    .reveal.visible    { opacity: 1; transform: none; }
+    .reveal-delay-1    { transition-delay: 0.12s; }
+    .reveal-delay-2    { transition-delay: 0.24s; }
+    .reveal-delay-3    { transition-delay: 0.36s; }
+
+    /* ── Navigation — white background so all logo colours show */
+    #nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: var(--nav-h);
+      background: var(--white);
+      border-bottom: 1px solid rgba(30,58,95,0.08);
+      z-index: 100;
+      box-shadow: 0 2px 20px rgba(0,0,0,0.06);
+    }
+    .nav-inner {
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    /* Logo: actual SVG mark + wordmark */
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      flex-shrink: 0;
+      text-decoration: none;
+    }
+    .nav-logo-svg { width: 34px; height: 46px; }
+    .nav-wordmark {
+      font-family: var(--serif);
+      font-size: 1.15rem;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      color: var(--navy);
+      line-height: 1;
+    }
+    .nav-wordmark em { color: var(--gold-br); font-style: normal; }
+
+    /* Nav links — dark on white */
+    .nav-links {
+      display: flex;
+      gap: clamp(1.5rem, 2.5vw, 3rem);
+      list-style: none;
+    }
+    .nav-links a {
+      font-size: 0.75rem;
+      font-weight: 400;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: rgba(30,58,95,0.6);
+      transition: color 0.25s;
+    }
+    .nav-links a:hover { color: var(--orange); }
+
+    /* Hamburger */
+    .nav-toggle {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      padding: 4px;
+      background: none;
+      border: none;
+    }
+    .nav-toggle span {
+      display: block;
+      width: 24px; height: 1.5px;
+      background: var(--navy);
+      transition: transform 0.3s, opacity 0.3s;
+    }
+    .nav-toggle.open span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+    .nav-toggle.open span:nth-child(2) { opacity: 0; }
+    .nav-toggle.open span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+
+    /* Mobile drawer */
+    .nav-mobile {
+      display: none;
+      position: fixed;
+      top: var(--nav-h); left: 0; right: 0;
+      background: var(--white);
+      border-bottom: 1px solid rgba(30,58,95,0.08);
+      padding: 1.5rem 0 2rem;
+      z-index: 99;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+    }
+    .nav-mobile.open { display: block; }
+    .nav-mobile ul {
+      list-style: none;
+      display: flex; flex-direction: column;
+      align-items: center; gap: 1.5rem;
+    }
+    .nav-mobile a {
+      font-size: 0.82rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: rgba(30,58,95,0.7);
+    }
+    .nav-mobile a:hover { color: var(--orange); }
+
+    /* ── Hero ───────────────────────────────────────────────── */
+    #hero {
+      position: relative;
+      height: 100vh;
+      min-height: 640px;
+      display: grid;
+      align-items: center;
+      overflow: hidden;
+      padding-top: var(--nav-h);
+    }
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      background-image: url('https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=1920&q=80');
+      background-size: cover;
+      background-position: center 60%;
+      transform: scale(1.06);
+      will-change: transform;
+    }
+    .hero-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(
+        to bottom,
+        rgba(14,28,55,0.55) 0%,
+        rgba(14,28,55,0.42) 50%,
+        rgba(14,28,55,0.70) 100%
+      );
+    }
+    .hero-content {
+      position: relative;
+      z-index: 2;
+    }
+    .hero-eyebrow {
+      font-size: clamp(0.62rem, 0.8vw, 0.72rem);
+      font-weight: 400;
+      letter-spacing: 0.26em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: clamp(1rem, 2vh, 1.75rem);
+      opacity: 0;
+      animation: fadeUp 1s 0.4s forwards;
+    }
+    .hero-heading {
+      font-family: var(--serif);
+      font-size: clamp(2.8rem, 5.5vw, 6.5rem);
+      font-weight: 500;
+      color: var(--white);
+      line-height: 1.08;
+      letter-spacing: -0.015em;
+      max-width: 14ch;
+      opacity: 0;
+      animation: fadeUp 1s 0.6s forwards;
+    }
+    .hero-sub {
+      font-size: clamp(0.9rem, 1.3vw, 1.1rem);
+      font-weight: 300;
+      color: rgba(250,250,250,0.68);
+      margin-top: clamp(1rem, 2.5vh, 1.75rem);
+      max-width: 44ch;
+      line-height: 1.82;
+      opacity: 0;
+      animation: fadeUp 1s 0.8s forwards;
+    }
+    .hero-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.65rem;
+      margin-top: clamp(1.5rem, 3vh, 2.75rem);
+      padding: 1rem 2.25rem;
+      border: 1px solid rgba(201,169,110,0.65);
+      color: var(--white);
+      font-size: 0.74rem;
+      font-weight: 400;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      transition: background 0.3s, border-color 0.3s, color 0.3s;
+      opacity: 0;
+      animation: fadeUp 1s 1s forwards;
+    }
+    .hero-cta:hover {
+      background: var(--gold);
+      border-color: var(--gold);
+      color: var(--navy);
+    }
+
+    /* Scroll indicator */
+    .scroll-indicator {
+      position: absolute;
+      bottom: 2.5rem; left: 50%;
+      transform: translateX(-50%);
+      display: flex; flex-direction: column;
+      align-items: center; gap: 8px;
+      opacity: 0;
+      animation: fadeIn 1s 1.6s forwards;
+    }
+    .scroll-indicator span {
+      font-size: 0.58rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: rgba(250,250,250,0.35);
+    }
+    .scroll-line {
+      width: 1px; height: 36px;
+      background: linear-gradient(to bottom, rgba(201,169,110,0.6), transparent);
+      animation: scrollPulse 2s 1.6s infinite;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: none; }
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; } to { opacity: 1; }
+    }
+    @keyframes scrollPulse {
+      0%   { transform: scaleY(0); transform-origin: top; }
+      50%  { transform: scaleY(1); transform-origin: top; }
+      51%  { transform: scaleY(1); transform-origin: bottom; }
+      100% { transform: scaleY(0); transform-origin: bottom; }
+    }
+
+    /* ── Shared section styles ──────────────────────────────── */
+    section { padding: clamp(5rem, 9vw, 10rem) 0; }
+
+    .section-label {
+      font-size: clamp(0.62rem, 0.7vw, 0.68rem);
+      font-weight: 400;
+      letter-spacing: 0.26em;
+      text-transform: uppercase;
+      color: var(--gold-br);
+      margin-bottom: 1rem;
+    }
+    .section-heading {
+      font-family: var(--serif);
+      font-size: clamp(2rem, 3.2vw, 3.5rem);
+      font-weight: 500;
+      color: var(--navy);
+      line-height: 1.14;
+      letter-spacing: -0.01em;
+    }
+    .section-divider {
+      width: 38px; height: 1px;
+      background: var(--gold);
+      margin: 2rem 0 2.75rem;
+    }
+
+    /* ── About ──────────────────────────────────────────────── */
+    #about { background: var(--white); }
+
+    .about-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: clamp(3rem, 7vw, 9rem);
+      align-items: center;
+    }
+    .about-body p {
+      font-size: clamp(0.9rem, 1vw, 1.05rem);
+      font-weight: 300;
+      line-height: 1.95;
+      color: #3D4451;
+      margin-bottom: 1.5rem;
+    }
+    .about-body p:last-child { margin-bottom: 0; }
+
+    .about-image-wrap {
+      position: relative;
+      padding-top: 18px;
+      padding-right: 18px;
+    }
+    .about-image-wrap::before {
+      content: '';
+      position: absolute;
+      top: 0; right: 0;
+      width: 68%; height: 68%;
+      border: 1px solid var(--gold-lt);
+      pointer-events: none;
+    }
+    .about-image-inner {
+      position: relative;
+      z-index: 1;
+      overflow: hidden;
+    }
+    .about-image-wrap img {
+      display: block;
+      width: 100%;
+      height: clamp(320px, 38vw, 560px);
+      object-fit: cover;
+      object-position: center;
+    }
+
+    /* ── How We Build ───────────────────────────────────────── */
+    #howwebuild {
+      background: var(--navy);
+      padding: clamp(5rem, 9vw, 10rem) 0;
+    }
+    #howwebuild .section-label   { color: var(--gold); }
+    #howwebuild .section-heading { color: var(--white); }
+    #howwebuild .section-divider { background: var(--gold); }
+
+    .hwb-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: clamp(3rem, 7vw, 9rem);
+      align-items: start;
+    }
+    .hwb-body p {
+      font-size: clamp(0.9rem, 1vw, 1.05rem);
+      font-weight: 300;
+      line-height: 1.95;
+      color: rgba(250,250,250,0.65);
+      margin-bottom: 1.5rem;
+    }
+    .hwb-body p:last-child { margin-bottom: 0; }
+    .hwb-body strong { font-weight: 400; color: var(--white); }
+
+    .hwb-pillars {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+    .hwb-pillar {
+      display: grid;
+      grid-template-columns: 4px 1fr;
+      gap: 1.75rem;
+      padding: 2rem 0;
+      border-bottom: 1px solid rgba(255,255,255,0.07);
+    }
+    .hwb-pillar:first-child { padding-top: 0; }
+    .hwb-pillar:last-child  { border-bottom: none; padding-bottom: 0; }
+    .hwb-pillar-bar { border-radius: 2px; }
+    .hwb-pillar-bar.p { background: rgba(250,250,250,0.8); }
+    .hwb-pillar-bar.i { background: var(--orange); }
+    .hwb-pillar-bar.c { background: var(--gold); }
+    .hwb-pillar-name {
+      font-size: 0.62rem;
+      font-weight: 500;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: rgba(250,250,250,0.38);
+      margin-bottom: 0.4rem;
+    }
+    .hwb-pillar-title {
+      font-family: var(--serif);
+      font-size: clamp(1rem, 1.2vw, 1.2rem);
+      font-weight: 500;
+      color: var(--white);
+      margin-bottom: 0.6rem;
+      line-height: 1.2;
+    }
+    .hwb-pillar-desc {
+      font-size: clamp(0.82rem, 0.9vw, 0.9rem);
+      font-weight: 300;
+      line-height: 1.78;
+      color: rgba(250,250,250,0.52);
+    }
+
+    /* ── Interlude ──────────────────────────────────────────── */
+    .interlude {
+      width: 100%;
+      height: clamp(280px, 32vw, 520px);
+      overflow: hidden;
+      position: relative;
+    }
+    .interlude img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center 40%;
+      transform: scale(1.08);
+      will-change: transform;
+    }
+
+    /* ── What We Build ──────────────────────────────────────── */
+    #build { background: var(--stone); }
+
+    .build-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5px;
+      margin-top: clamp(2.5rem, 4vw, 4rem);
+      background: rgba(30,58,95,0.08);
+    }
+    .build-card {
+      background: var(--stone);
+      padding: clamp(2rem, 3.5vw, 3.5rem);
+    }
+    .build-icon {
+      display: flex;
+      align-items: flex-end;
+      gap: 4px;
+      margin-bottom: 2rem;
+      height: 34px;
+    }
+    .build-icon-bar { width: 8px; border-radius: 1px; }
+    .bar-navy  { background: var(--navy); }
+    .bar-orange{ background: var(--orange); }
+    .bar-gold  { background: var(--gold-br); }
+
+    .build-card-title {
+      font-family: var(--serif);
+      font-size: clamp(1.2rem, 1.4vw, 1.5rem);
+      font-weight: 500;
+      color: var(--navy);
+      margin-bottom: 1rem;
+      line-height: 1.22;
+    }
+    .build-card p {
+      font-size: clamp(0.86rem, 0.9vw, 0.95rem);
+      font-weight: 300;
+      line-height: 1.88;
+      color: #4A5264;
+    }
+
+    .build-closing {
+      margin-top: clamp(3rem, 5vw, 5rem);
+      text-align: center;
+      font-family: var(--serif);
+      font-style: italic;
+      font-size: clamp(1rem, 1.4vw, 1.3rem);
+      color: rgba(30,58,95,0.6);
+    }
+
+    /* ── Contact ────────────────────────────────────────────── */
+    #contact { background: var(--white); }
+
+    .contact-layout {
+      display: grid;
+      grid-template-columns: 1fr 1.2fr;
+      gap: clamp(3rem, 7vw, 9rem);
+      align-items: start;
+    }
+    .contact-intro p {
+      font-size: clamp(0.9rem, 1vw, 1.05rem);
+      font-weight: 300;
+      line-height: 1.95;
+      color: #3D4451;
+      margin-bottom: 2.5rem;
+    }
+    .contact-details {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+    .contact-details span {
+      font-size: clamp(0.78rem, 0.85vw, 0.88rem);
+      font-weight: 300;
+      letter-spacing: 0.04em;
+      color: #6B7280;
+    }
+
+    /* Form */
+    .contact-form {
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.25rem;
+    }
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.45rem;
+    }
+    .form-group label {
+      font-size: 0.66rem;
+      font-weight: 500;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: #6B7280;
+    }
+    .form-group input,
+    .form-group textarea {
+      background: #F0EDE8;
+      border: 1px solid #DDD8D0;
+      border-radius: 0;
+      padding: 0.9rem 1.1rem;
+      font-family: var(--sans);
+      font-size: clamp(0.88rem, 0.95vw, 0.95rem);
+      font-weight: 300;
+      color: var(--text);
+      outline: none;
+      transition: border-color 0.25s, background 0.25s;
+      width: 100%;
+      -webkit-appearance: none;
+    }
+    .form-group input::placeholder,
+    .form-group textarea::placeholder { color: #B0A898; }
+    .form-group input:focus,
+    .form-group textarea:focus {
+      border-color: var(--navy);
+      background: #FAFAF8;
+    }
+    .form-group textarea { min-height: 140px; resize: vertical; }
+
+    .form-submit {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.7rem;
+      align-self: flex-start;
+      padding: 1rem 2.4rem;
+      background: var(--navy);
+      border: 1px solid var(--navy);
+      color: var(--white);
+      font-family: var(--sans);
+      font-size: 0.74rem;
+      font-weight: 400;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: background 0.3s, border-color 0.3s;
+    }
+    .form-submit:hover { background: var(--navy-dk); border-color: var(--navy-dk); }
+    .form-submit svg  { width: 13px; height: 13px; }
+    .form-submit:disabled { opacity: 0.5; cursor: default; }
+    .form-status {
+      font-size: 0.84rem;
+      font-weight: 300;
+      color: var(--navy);
+      min-height: 1.2rem;
+    }
+
+    /* ── Footer ─────────────────────────────────────────────── */
+    footer {
+      background: var(--navy);
+      padding: 2rem 0;
+    }
+    .footer-inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+    .footer-logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .footer-bars {
+      display: flex;
+      gap: 4px;
+    }
+    .footer-bars span {
+      display: block;
+      width: 7px; height: 22px;
+      border-radius: 1px;
+    }
+    .footer-bars .fp { background: rgba(250,250,250,0.65); }
+    .footer-bars .fi { background: var(--orange); }
+    .footer-bars .fc { background: var(--gold); }
+    .footer-wm {
+      font-family: var(--serif);
+      font-size: 0.85rem;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      color: rgba(250,250,250,0.5);
+    }
+    .footer-wm em { color: var(--gold); font-style: normal; }
+    .footer-right {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 0.2rem;
+    }
+    .footer-copy,
+    .footer-location {
+      font-size: 0.7rem;
+      font-weight: 300;
+      letter-spacing: 0.04em;
+      color: rgba(250,250,250,0.28);
+    }
+
+    /* ── Responsive ─────────────────────────────────────────── */
+    @media (max-width: 960px) {
+      .about-layout   { grid-template-columns: 1fr; gap: 3rem; }
+      .about-image-wrap { order: -1; padding-top: 12px; padding-right: 12px; }
+      .hwb-layout     { grid-template-columns: 1fr; gap: 3rem; }
+      .build-grid     { grid-template-columns: 1fr; }
+      .contact-layout { grid-template-columns: 1fr; gap: 3rem; }
+      .footer-right   { align-items: flex-start; }
+    }
+    @media (max-width: 640px) {
+      .nav-links  { display: none; }
+      .nav-toggle { display: flex; }
+      .form-row   { grid-template-columns: 1fr; }
+      .footer-inner { flex-direction: column; align-items: flex-start; gap: 1rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ── Navigation ─────────────────────────────────────────── -->
+  <nav id="nav">
+    <div class="container nav-inner">
+      <a class="nav-logo" href="#hero" aria-label="Columnpic home">
+        <!-- Actual three-bar logo SVG inline — matching attached image exactly -->
+        <svg class="nav-logo-svg" viewBox="0 0 300 400" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <rect x="0"   y="0" width="80" height="400" rx="3" fill="#1E3A5F"/>
+          <rect x="110" y="0" width="80" height="400" rx="3" fill="#E85400"/>
+          <rect x="220" y="0" width="80" height="400" rx="3" fill="#A67C2E"/>
+        </svg>
+        <span class="nav-wordmark">COLUMN<em>PIC</em></span>
+      </a>
+
+      <ul class="nav-links" role="list">
+        <li><a href="#about">About</a></li>
+        <li><a href="#howwebuild">How We Build</a></li>
+        <li><a href="#build">What We Build</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+
+      <button class="nav-toggle" id="navToggle" aria-label="Open menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Mobile drawer -->
+  <div class="nav-mobile" id="navMobile" aria-hidden="true">
+    <ul role="list">
+      <li><a href="#about"      onclick="closeMobile()">About</a></li>
+      <li><a href="#howwebuild" onclick="closeMobile()">How We Build</a></li>
+      <li><a href="#build"      onclick="closeMobile()">What We Build</a></li>
+      <li><a href="#contact"    onclick="closeMobile()">Contact</a></li>
+    </ul>
+  </div>
+
+  <!-- ── Hero ───────────────────────────────────────────────── -->
+  <section id="hero">
+    <div class="hero-bg" id="heroBg"></div>
+    <div class="hero-overlay"></div>
+    <div class="container">
+      <div class="hero-content">
+        <p class="hero-eyebrow">Ottawa, Ontario — Canada</p>
+        <h1 class="hero-heading">Canadian homes.<br>Built to last.</h1>
+        <p class="hero-sub">Columnpic delivers precision residential construction across Ontario.</p>
+        <a class="hero-cta" href="#contact">
+          Get in Touch
+          <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor"
+               stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <line x1="5" y1="12" x2="19" y2="12"/>
+            <polyline points="12 5 19 12 12 19"/>
+          </svg>
+        </a>
+      </div>
+    </div>
+    <div class="scroll-indicator" aria-hidden="true">
+      <span>Scroll</span>
+      <div class="scroll-line"></div>
+    </div>
+  </section>
+
+  <!-- ── About ──────────────────────────────────────────────── -->
+  <section id="about">
+    <div class="container">
+      <div class="about-layout">
+        <div class="about-text">
+          <p class="section-label reveal">Who We Are</p>
+          <h2 class="section-heading reveal">A builder defined<br>by what we deliver.</h2>
+          <div class="section-divider reveal"></div>
+          <div class="about-body">
+            <p class="reveal reveal-delay-1">
+              Columnpic is a Canadian construction company headquartered in Ottawa, Ontario. We are focused on one thing: building exceptional homes for Canadian families and landowners.
+            </p>
+            <p class="reveal reveal-delay-2">
+              We hold ourselves to standards that go beyond code. Every home we deliver is engineered for durability, energy performance, and long-term value — because we believe a home is the most important investment a family will make.
+            </p>
+            <p class="reveal reveal-delay-3">
+              We work with a select number of clients at a time. This is intentional. It allows us to give every project the attention it deserves.
+            </p>
+          </div>
+        </div>
+        <div class="about-image-wrap reveal">
+          <div class="about-image-inner">
+            <img
+              src="https://images.unsplash.com/photo-1568605114967-8130f3a36994?auto=format&fit=crop&w=1200&q=80"
+              alt="Architecturally considered residential exterior"
+              loading="lazy" width="1200" height="800"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── How We Build ─────────────────────────────────────────
+       Factory-built, site-fit — outcome only, no operational detail
+  ────────────────────────────────────────────────────────────── -->
+  <section id="howwebuild">
+    <div class="container">
+      <div class="hwb-layout">
+        <div class="hwb-left">
+          <p class="section-label reveal">Our Method</p>
+          <h2 class="section-heading reveal">Factory-Built.<br>Site-Fit.</h2>
+          <div class="section-divider reveal"></div>
+          <div class="hwb-body">
+            <p class="reveal reveal-delay-1">
+              Columnpic homes are not built in the open — exposed to weather delays, scheduling uncertainty, and the variability that defines traditional site construction. Every component is <strong>precision-engineered in a controlled manufacturing environment</strong>, quality-verified to exact specification, then delivered and assembled on your property.
+            </p>
+            <p class="reveal reveal-delay-2">
+              This is a fundamentally different way to build a home — and a better one. Factory conditions eliminate the inconsistencies that compromise traditional builds. The result is a tighter envelope, superior energy performance, and a quality of finish that open-site construction cannot reliably replicate.
+            </p>
+            <p class="reveal reveal-delay-3">
+              Our clients receive a finished home. Not a construction site.
+            </p>
+          </div>
+        </div>
+
+        <div class="hwb-pillars reveal reveal-delay-1">
+          <div class="hwb-pillar">
+            <div class="hwb-pillar-bar p"></div>
+            <div>
+              <p class="hwb-pillar-name">Precision</p>
+              <p class="hwb-pillar-title">Engineered to specification</p>
+              <p class="hwb-pillar-desc">Every component manufactured to tolerances that site-based trades cannot match. Your home arrives ready to assemble — not ready to improvise.</p>
+            </div>
+          </div>
+          <div class="hwb-pillar">
+            <div class="hwb-pillar-bar i"></div>
+            <div>
+              <p class="hwb-pillar-name">Innovation</p>
+              <p class="hwb-pillar-title">A method built for today</p>
+              <p class="hwb-pillar-desc">Factory-built construction means faster timelines, less waste, and a building envelope that outperforms conventional methods year after year.</p>
+            </div>
+          </div>
+          <div class="hwb-pillar">
+            <div class="hwb-pillar-bar c"></div>
+            <div>
+              <p class="hwb-pillar-name">Craftsmanship</p>
+              <p class="hwb-pillar-title">Finished to gold standard</p>
+              <p class="hwb-pillar-desc">Controlled manufacturing means consistent quality — every time, on every home. What leaves the factory is what your family moves into.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Interlude image -->
+  <div class="interlude" aria-hidden="true">
+    <img
+      src="https://images.unsplash.com/photo-1600585154526-990dced4db0d?auto=format&fit=crop&w=1920&q=75"
+      alt="" loading="lazy" id="interludeImg" width="1920" height="520"
+    />
+  </div>
+
+  <!-- ── What We Build ──────────────────────────────────────── -->
+  <section id="build">
+    <div class="container">
+      <p class="section-label reveal">What We Build</p>
+      <h2 class="section-heading reveal">Homes built for the long term.</h2>
+      <div class="section-divider reveal"></div>
+
+      <div class="build-grid">
+        <div class="build-card reveal">
+          <div class="build-icon" aria-hidden="true">
+            <span class="build-icon-bar bar-navy" style="height:30px"></span>
+            <span class="build-icon-bar bar-navy" style="height:22px"></span>
+            <span class="build-icon-bar bar-navy" style="height:16px"></span>
+          </div>
+          <h3 class="build-card-title">Custom Homes</h3>
+          <p>Single-family residences designed for the Ontario market and built to exact client specification. Every detail considered. Every system engineered to perform — not just to pass inspection.</p>
+        </div>
+
+        <div class="build-card reveal reveal-delay-1">
+          <div class="build-icon" aria-hidden="true">
+            <span class="build-icon-bar bar-orange" style="height:22px"></span>
+            <span class="build-icon-bar bar-orange" style="height:30px"></span>
+            <span class="build-icon-bar bar-orange" style="height:18px"></span>
+          </div>
+          <h3 class="build-card-title">Factory Precision</h3>
+          <p>Our factory-built, site-fit method removes the variability of traditional construction. Homes are manufactured under controlled conditions and assembled on your lot — tighter, more efficient, and finished to a higher standard.</p>
+        </div>
+
+        <div class="build-card reveal reveal-delay-2">
+          <div class="build-icon" aria-hidden="true">
+            <span class="build-icon-bar bar-gold" style="height:16px"></span>
+            <span class="build-icon-bar bar-gold" style="height:22px"></span>
+            <span class="build-icon-bar bar-gold" style="height:30px"></span>
+          </div>
+          <h3 class="build-card-title">Turnkey Delivery</h3>
+          <p>From permits to occupancy, we manage the complete build. Our clients receive a finished home — not a construction headache. One point of contact. One standard of quality. Done.</p>
+        </div>
+      </div>
+
+      <p class="build-closing reveal">We don't cut corners. We don't need to.</p>
+    </div>
+  </section>
+
+  <!-- ── Contact ────────────────────────────────────────────── -->
+  <section id="contact">
+    <div class="container">
+      <div class="contact-layout">
+        <div class="contact-intro">
+          <p class="section-label reveal">Get In Touch</p>
+          <h2 class="section-heading reveal">Let's talk<br>about your home.</h2>
+          <div class="section-divider reveal"></div>
+          <p class="reveal">We take on a limited number of projects each year. If you are looking for a builder who takes quality seriously, we would like to hear from you.</p>
+          <div class="contact-details reveal">
+            <span>Ottawa, Ontario, Canada</span>
+            <span>admin@columnpic.com</span>
+          </div>
+        </div>
+
+        <form class="contact-form reveal" id="contactForm" novalidate>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="name">Name</label>
+              <input type="text" id="name" name="name" placeholder="Your name" required autocomplete="name" />
+            </div>
+            <div class="form-group">
+              <label for="email">Email</label>
+              <input type="email" id="email" name="email" placeholder="your@email.com" required autocomplete="email" />
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="phone">Phone <span style="opacity:0.45;font-size:0.65rem;text-transform:none;letter-spacing:0">(optional)</span></label>
+            <input type="tel" id="phone" name="phone" placeholder="+1 (613) 000-0000" autocomplete="tel" />
+          </div>
+          <div class="form-group">
+            <label for="message">How can we help?</label>
+            <textarea id="message" name="message" placeholder="Tell us about your project…" required></textarea>
+          </div>
+          <!-- Honeypot -->
+          <input type="text" name="_honey" style="display:none" tabindex="-1" autocomplete="off" />
+          <div style="display:flex;align-items:center;gap:1.5rem;flex-wrap:wrap;">
+            <button type="submit" class="form-submit" id="submitBtn">
+              Send
+              <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor"
+                   stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <line x1="5" y1="12" x2="19" y2="12"/>
+                <polyline points="12 5 19 12 12 19"/>
+              </svg>
+            </button>
+            <p class="form-status" id="formStatus" aria-live="polite"></p>
+          </div>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Footer ─────────────────────────────────────────────── -->
+  <footer>
+    <div class="container footer-inner">
+      <div class="footer-logo">
+        <div class="footer-bars" aria-hidden="true">
+          <span class="fp"></span>
+          <span class="fi"></span>
+          <span class="fc"></span>
+        </div>
+        <span class="footer-wm">COLUMN<em>PIC</em></span>
+      </div>
+      <div class="footer-right">
+        <p class="footer-copy">© 2026 Columnpic — 17185243 Canada Inc.</p>
+        <p class="footer-location">Ottawa, Ontario, Canada</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ── Scripts ────────────────────────────────────────────── -->
+  <script>
+    // ── Mobile nav ───────────────────────────────────────────
+    const toggle = document.getElementById('navToggle');
+    const mobile = document.getElementById('navMobile');
+
+    toggle.addEventListener('click', () => {
+      const open = mobile.classList.toggle('open');
+      toggle.classList.toggle('open', open);
+      toggle.setAttribute('aria-expanded', open);
+      mobile.setAttribute('aria-hidden', !open);
+    });
+    function closeMobile() {
+      mobile.classList.remove('open');
+      toggle.classList.remove('open');
+      toggle.setAttribute('aria-expanded', 'false');
+      mobile.setAttribute('aria-hidden', 'true');
+    }
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeMobile(); });
+    document.addEventListener('click', e => {
+      if (mobile.classList.contains('open') && !mobile.contains(e.target) && !toggle.contains(e.target))
+        closeMobile();
+    });
+
+    // ── Parallax ─────────────────────────────────────────────
+    const heroBg       = document.getElementById('heroBg');
+    const interludeImg = document.getElementById('interludeImg');
+    const interlude    = interludeImg ? interludeImg.parentElement : null;
+
+    function parallax() {
+      const sy = window.scrollY;
+      if (heroBg) {
+        heroBg.style.transform = `scale(1.06) translateY(${Math.min(sy * 0.16, 180)}px)`;
+      }
+      if (interlude && interludeImg) {
+        const rect = interlude.getBoundingClientRect();
+        if (rect.bottom > 0 && rect.top < window.innerHeight) {
+          const offset = Math.max(-28, Math.min(28, (rect.top + rect.height / 2 - window.innerHeight / 2) * 0.1));
+          interludeImg.style.transform = `scale(1.08) translateY(${offset}px)`;
+        }
+      }
+    }
+    window.addEventListener('scroll', parallax, { passive: true });
+    parallax();
+
+    // ── Reveal on scroll ─────────────────────────────────────
+    const io = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); }
+      });
+    }, { threshold: 0.05, rootMargin: '0px 0px -20px 0px' });
+    document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+    // ── Contact form — FormSubmit.co ──────────────────────────
+    // ACTIVATION: First submission sends a verification email to admin@columnpic.com.
+    // Click the link once. All future submissions arrive in your inbox automatically.
+    const ENDPOINT = 'https://formsubmit.co/ajax/admin@columnpic.com';
+    const form     = document.getElementById('contactForm');
+    const btn      = document.getElementById('submitBtn');
+    const statusEl = document.getElementById('formStatus');
+
+    const resetBtn = () => {
+      btn.disabled = false;
+      btn.innerHTML = 'Send <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>';
+    };
+
+    form.addEventListener('submit', async e => {
+      e.preventDefault();
+      if (!form.checkValidity()) { form.reportValidity(); return; }
+      btn.disabled = true;
+      btn.textContent = 'Sending…';
+      statusEl.textContent = '';
+
+      const payload = {
+        name:      document.getElementById('name').value.trim(),
+        email:     document.getElementById('email').value.trim(),
+        phone:     document.getElementById('phone').value.trim() || 'Not provided',
+        message:   document.getElementById('message').value.trim(),
+        _subject:  'New inquiry — Columnpic',
+        _template: 'table',
+        _captcha:  'false'
+      };
+
+      try {
+        const res  = await fetch(ENDPOINT, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        const json = await res.json().catch(() => ({}));
+        if (res.ok && json.success === 'true') {
+          form.reset();
+          statusEl.textContent = "Your message has been received. We'll be in touch.";
+          btn.textContent = 'Sent ✓';
+        } else {
+          statusEl.textContent = json.message || 'Something went wrong. Please email admin@columnpic.com directly.';
+          resetBtn();
+        }
+      } catch {
+        statusEl.textContent = 'Connection error. Please try again or email admin@columnpic.com.';
+        resetBtn();
+      }
+    });
+  </script>
+</body>
+</html>
