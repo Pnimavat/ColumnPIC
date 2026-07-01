@@ -2,7 +2,9 @@
 import { useMemo } from 'react'
 import { useForeignAssetStore } from '@/stores/foreignAssetStore'
 import { useHouseholdStore } from '@/stores/householdStore'
+import { useUIStore } from '@/stores/uiStore'
 import { KPICard } from '@/components/dashboard/KPICard'
+import { ForeignAssetModal } from '@/components/overseas/ForeignAssetModal'
 import { formatAmount } from '@/lib/utils/format'
 import { ForeignAsset } from '@/types'
 
@@ -18,6 +20,7 @@ const COUNTRY_FLAGS: Record<string, string> = {
 export default function OverseasPage() {
   const { foreignAssets } = useForeignAssetStore()
   const { household } = useHouseholdStore()
+  const { openForeignAssetModal } = useUIStore()
   const fxRates = household?.fx_rates ?? {}
   const baseCurrency = household?.base_currency ?? 'CAD'
 
@@ -57,7 +60,7 @@ export default function OverseasPage() {
             Foreign investments, property, and savings converted to {baseCurrency}. Monthly commitments tracked automatically.
           </p>
         </div>
-        <button style={{ background: '#FB923C', color: '#0A0A0A', border: 'none', borderRadius: '8px', padding: '0.625rem 1.25rem', fontWeight: 600, fontSize: '0.875rem', cursor: 'pointer', flexShrink: 0 }}>+ Add Asset</button>
+        <button onClick={() => openForeignAssetModal('add')} style={{ background: '#FB923C', color: '#0A0A0A', border: 'none', borderRadius: '8px', padding: '0.625rem 1.25rem', fontWeight: 600, fontSize: '0.875rem', cursor: 'pointer', flexShrink: 0 }}>+ Add Asset</button>
       </div>
 
       {/* KPIs */}
@@ -96,6 +99,7 @@ export default function OverseasPage() {
               {assets.map((a, i) => {
                 const valueCAD = toCAD(a.current_value ?? 0, a.currency)
                 const monthlyCAD = toCAD(a.monthly_commitment, a.currency)
+                const gain = a.purchase_value ? a.current_value! - a.purchase_value : null
                 const gainPct = a.purchase_value && a.purchase_value > 0 ? ((a.current_value! - a.purchase_value) / a.purchase_value) * 100 : null
 
                 return (
@@ -126,6 +130,7 @@ export default function OverseasPage() {
                         <p style={{ color: '#60A5FA', fontSize: '0.8125rem', fontFamily: 'monospace', margin: 0 }}>{formatAmount(monthlyCAD, baseCurrency)}/mo</p>
                       </div>
                     )}
+                    <button onClick={() => openForeignAssetModal('edit', a.id)} style={{ background: 'none', border: '1px solid #1E1E1E', borderRadius: '6px', color: '#888888', padding: '0.25rem 0.5rem', fontSize: '0.6875rem', cursor: 'pointer', flexShrink: 0 }}>Edit</button>
                   </div>
                 )
               })}
@@ -138,6 +143,8 @@ export default function OverseasPage() {
       <p style={{ color: '#444444', fontSize: '0.75rem', textAlign: 'center' }}>
         Values converted at stored FX rates — update rates in Settings to refresh.
       </p>
+
+      <ForeignAssetModal />
     </div>
   )
 }

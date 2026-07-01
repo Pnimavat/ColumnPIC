@@ -4,12 +4,26 @@ interface UIStore {
   sidebarCollapsed: boolean
   setSidebarCollapsed: (v: boolean) => void
 
-  // Modal state
+  // Transaction modal
   transactionModalOpen: boolean
   transactionModalMode: 'add' | 'edit'
   transactionModalId: string | null
   openTransactionModal: (mode: 'add' | 'edit', id?: string) => void
   closeTransactionModal: () => void
+
+  // Account modal
+  accountModalOpen: boolean
+  accountModalMode: 'add' | 'edit'
+  accountModalId: string | null
+  openAccountModal: (mode: 'add' | 'edit', id?: string) => void
+  closeAccountModal: () => void
+
+  // Foreign asset modal
+  foreignAssetModalOpen: boolean
+  foreignAssetModalMode: 'add' | 'edit'
+  foreignAssetModalId: string | null
+  openForeignAssetModal: (mode: 'add' | 'edit', id?: string) => void
+  closeForeignAssetModal: () => void
 
   // Toast
   toasts: { id: string; message: string; type: 'success' | 'error' | 'info' }[]
@@ -26,6 +40,18 @@ export const useUIStore = create<UIStore>((set) => ({
   transactionModalId: null,
   openTransactionModal: (mode, id) => set({ transactionModalOpen: true, transactionModalMode: mode, transactionModalId: id ?? null }),
   closeTransactionModal: () => set({ transactionModalOpen: false, transactionModalId: null }),
+
+  accountModalOpen: false,
+  accountModalMode: 'add',
+  accountModalId: null,
+  openAccountModal: (mode, id) => set({ accountModalOpen: true, accountModalMode: mode, accountModalId: id ?? null }),
+  closeAccountModal: () => set({ accountModalOpen: false, accountModalId: null }),
+
+  foreignAssetModalOpen: false,
+  foreignAssetModalMode: 'add',
+  foreignAssetModalId: null,
+  openForeignAssetModal: (mode, id) => set({ foreignAssetModalOpen: true, foreignAssetModalMode: mode, foreignAssetModalId: id ?? null }),
+  closeForeignAssetModal: () => set({ foreignAssetModalOpen: false, foreignAssetModalId: null }),
 
   toasts: [],
   addToast: (message, type = 'success') => {

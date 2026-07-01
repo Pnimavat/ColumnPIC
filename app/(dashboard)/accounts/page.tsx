@@ -2,7 +2,9 @@
 import { useMemo } from 'react'
 import { useAccountStore } from '@/stores/accountStore'
 import { useHouseholdStore } from '@/stores/householdStore'
+import { useUIStore } from '@/stores/uiStore'
 import { KPICard } from '@/components/dashboard/KPICard'
+import { AccountModal } from '@/components/accounts/AccountModal'
 import { formatAmount } from '@/lib/utils/format'
 import { AccountType } from '@/types'
 
@@ -15,6 +17,7 @@ const TYPE_COLORS: Record<AccountType, string> = {
 export default function AccountsPage() {
   const { accounts } = useAccountStore()
   const { members, household } = useHouseholdStore()
+  const { openAccountModal } = useUIStore()
   const baseCurrency = household?.base_currency ?? 'CAD'
 
   const stats = useMemo(() => {
@@ -36,7 +39,7 @@ export default function AccountsPage() {
             Track TFSA, RRSP, FHSA, and investment accounts across household members. Monitor contribution room and tax efficiency.
           </p>
         </div>
-        <button style={{ background: '#C084FC', color: '#0A0A0A', border: 'none', borderRadius: '8px', padding: '0.625rem 1.25rem', fontWeight: 600, fontSize: '0.875rem', cursor: 'pointer', flexShrink: 0 }}>+ Add Account</button>
+        <button onClick={() => openAccountModal('add')} style={{ background: '#C084FC', color: '#0A0A0A', border: 'none', borderRadius: '8px', padding: '0.625rem 1.25rem', fontWeight: 600, fontSize: '0.875rem', cursor: 'pointer', flexShrink: 0 }}>+ Add Account</button>
       </div>
 
       {/* KPIs */}
@@ -72,9 +75,12 @@ export default function AccountsPage() {
                         <p style={{ color: '#E8E8E8', fontSize: '0.9375rem', fontWeight: 600, margin: '0 0 0.25rem' }}>{acc.account_name}</p>
                         {acc.institution && <p style={{ color: '#888888', fontSize: '0.75rem', margin: 0 }}>{acc.institution}</p>}
                       </div>
-                      <span style={{ fontSize: '0.6875rem', fontWeight: 700, padding: '0.25rem 0.625rem', borderRadius: '100px', background: `${typeColor}18`, color: typeColor, textTransform: 'uppercase', letterSpacing: '0.04em', flexShrink: 0, marginLeft: '0.5rem' }}>
-                        {acc.account_type}
-                      </span>
+                      <div style={{ display: 'flex', gap: '0.375rem', alignItems: 'center', marginLeft: '0.5rem' }}>
+                        <span style={{ fontSize: '0.6875rem', fontWeight: 700, padding: '0.25rem 0.625rem', borderRadius: '100px', background: `${typeColor}18`, color: typeColor, textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+                          {acc.account_type}
+                        </span>
+                        <button onClick={() => openAccountModal('edit', acc.id)} style={{ background: 'none', border: '1px solid #1E1E1E', borderRadius: '6px', color: '#888888', padding: '0.25rem 0.5rem', fontSize: '0.6875rem', cursor: 'pointer' }}>Edit</button>
+                      </div>
                     </div>
 
                     <p style={{ color: typeColor, fontSize: '1.5rem', fontWeight: 700, fontFamily: 'monospace', margin: '0 0 0.375rem', letterSpacing: '-0.02em' }}>
@@ -146,6 +152,7 @@ export default function AccountsPage() {
           </p>
         </div>
       </div>
+      <AccountModal />
     </div>
   )
 }
